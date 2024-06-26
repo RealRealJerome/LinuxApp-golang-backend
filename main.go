@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/A5-golang-backend/course"
+	courseReminder "github.com/A5-golang-backend/course_reminder"
 	"github.com/A5-golang-backend/sms"
 	"github.com/A5-golang-backend/user"
 	"github.com/gorilla/mux"
@@ -16,6 +18,15 @@ func SetRoute(router *mux.Router) {
 	router.HandleFunc("/user/{phoneNum}/signUp:teacher", user.HandleSignUpTeacher).Methods("POST")
 	router.HandleFunc("/user/{phoneNum}/smsCode", sms.GetSmsCode).Methods("GET")
 	router.HandleFunc("/user/{phoneNum}/smsCode", sms.VerifySmsCode).Methods("POST")
+	router.HandleFunc("/course:create", course.CreateCourse).Methods("POST")
+	router.HandleFunc("/course:edit", course.ModifyCourse).Methods("PUT")
+	router.HandleFunc("/course:delete", course.DeleteCourse).Methods("DELETE")
+	router.HandleFunc("/course:detail", course.DescribeCourse).Methods("GET")
+	router.HandleFunc("/course:list", course.DescribeCourses).Methods("GET")
+	router.HandleFunc("/courseReminder:create", courseReminder.CreateCourseReminder).Methods("POST")
+	router.HandleFunc("/courseReminder:modify", courseReminder.ModifyCourseReminder).Methods("PUT")
+	router.HandleFunc("/courseReminder:delete", courseReminder.DeleteCourseReminder).Methods("DELETE")
+	router.HandleFunc("/courseReminder:list", courseReminder.DescribesCourseReminderByTeacherName).Methods("GET")
 }
 func main() {
 	// 创建新的路由器

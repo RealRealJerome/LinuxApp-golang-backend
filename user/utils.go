@@ -65,8 +65,8 @@ func generateToken(phoneNum string) string {
 	return token
 }
 
-// checkToken 校验token是否有效
-func checkToken(token string) bool {
+// CheckToken 校验token是否有效
+func CheckToken(token string) bool {
 	val, ok := TokenMap[token]
 	if !ok {
 		return false
@@ -76,6 +76,11 @@ func checkToken(token string) bool {
 		return false
 	}
 	return true
+}
+
+// GetToken 通过token获取用户信息(手机号)
+func GetToken(token string) string {
+	return TokenMap[token].phoneNum
 }
 
 // ValidatePassword 校验密码是否至少8位字符，包含数字和字母
