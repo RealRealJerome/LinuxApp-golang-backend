@@ -27,7 +27,16 @@ type DescribesReminderReplyNode struct {
 	Form       string `json:"form"`
 	RemindTime string `json:"remind_time"`
 }
+type DescribesReq struct {
+	Week Week   `json:"week"`
+	Name string `json:"name"`
+}
+type Week struct {
+	Start int `json:"start"`
+	End   int `json:"end"`
+}
 
+// DescribeCourse 根据名字查询某个课程详细信息
 func DescribeCourse(w http.ResponseWriter, r *http.Request) {
 	token := r.Header.Get("token")
 	if !user.CheckToken(token) {
@@ -122,9 +131,19 @@ func DescribeCourses(w http.ResponseWriter, r *http.Request) {
 		w.Write(responseJSON)
 		return
 	}
+	// 解析请求体
+	var body DescribesReq
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+	weeks := make([]int, 0)
+	for i := body.Week.Start; i < body.Week.End; i++ {
+		weeks = append(weeks, i)
+	}
 	// 查询数据
-	selectQuery := "SELECT c.name,c.time_weeks,c.time_days,c.day_time,c.credit,c.classroom,ud.name,cr.form,cr.time_minutes FROM course c LEFT JOIN course_teacher ct ON c.id = ct.course_id LEFT JOIN user u ON ct.teacher_id = u.id LEFT JOIN user_detail ud ON u.user_detail_id = ud.id LEFT JOIN course_reminder cr on c.course_reminder_id = cr.id and cr.teacher_id = u.id"
-	rows, err := mysqlUtil.DB.Query(selectQuery)
+	selectQuery := "SELECT c.name,c.time_weeks,c.time_days,c.day_time,c.credit,c.classroom,ud.name,cr.form,cr.time_minutes FROM course c LEFT JOIN course_teacher ct ON c.id = ct.course_id LEFT JOIN user u ON ct.teacher_id = u.id LEFT JOIN user_detail ud ON u.user_detail_id = ud.id LEFT JOIN course_reminder cr on c.course_reminder_id = cr.id and cr.teacher_id = u.id where c.name = ?"
+	rows, err := mysqlUtil.DB.Query(selectQuery, body.Name)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -139,6 +158,9 @@ func DescribeCourses(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
+		}
+		if !JudgeWeekContains(weeks, selectedTimeWeeks) {
+			continue
 		}
 		hasReminder := true
 		if !selectedForm.Valid {

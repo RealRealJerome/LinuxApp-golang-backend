@@ -16,6 +16,7 @@ func SetRoute(router *mux.Router) {
 	router.HandleFunc("/user/{phoneNum}/signIn:smsCode", user.HandleSignInSMS).Methods("POST")
 	router.HandleFunc("/user/{phoneNum}/chPw", user.HandleChangePW).Methods("PUT")
 	router.HandleFunc("/user/{phoneNum}/signUp:teacher", user.HandleSignUpTeacher).Methods("POST")
+	router.HandleFunc("/user:detail", user.Describe).Methods("GET")
 	router.HandleFunc("/user/{phoneNum}/smsCode", sms.GetSmsCode).Methods("GET")
 	router.HandleFunc("/user/{phoneNum}/smsCode", sms.VerifySmsCode).Methods("POST")
 	router.HandleFunc("/course:create", course.CreateCourse).Methods("POST")

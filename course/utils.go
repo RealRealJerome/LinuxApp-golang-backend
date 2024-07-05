@@ -27,3 +27,11 @@ func Str2IntArr(input string) []int {
 	}
 	return res
 }
+func JudgeWeekContains(weeks []int, judgeWeeks string) bool {
+	for _, item := range weeks {
+		if strings.Contains(judgeWeeks, strconv.Itoa(item)) {
+			return true
+		}
+	}
+	return false
+}
