@@ -5,6 +5,7 @@ import (
 	"github.com/A5-golang-backend/course"
 	courseReminder "github.com/A5-golang-backend/course_reminder"
 	"github.com/A5-golang-backend/sms"
+	sparkModel "github.com/A5-golang-backend/spark_model"
 	"github.com/A5-golang-backend/user"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -28,6 +29,7 @@ func SetRoute(router *mux.Router) {
 	router.HandleFunc("/courseReminder:modify", courseReminder.ModifyCourseReminder).Methods("PUT")
 	router.HandleFunc("/courseReminder:delete", courseReminder.DeleteCourseReminder).Methods("DELETE")
 	router.HandleFunc("/courseReminder:list", courseReminder.DescribesCourseReminderByTeacherName).Methods("GET")
+	router.HandleFunc("/assistant:spark", sparkModel.Describe).Methods("POST")
 }
 func main() {
 	// 创建新的路由器
