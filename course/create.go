@@ -19,7 +19,7 @@ type CreateReq struct {
 type Time struct {
 	Weeks   []int `json:"weeks"`
 	Days    []int `json:"days"`
-	DayTime int   `json:"dayTime"`
+	DayTime []int `json:"dayTime"`
 }
 
 func CreateCourse(w http.ResponseWriter, r *http.Request) {
@@ -54,7 +54,7 @@ func CreateCourse(w http.ResponseWriter, r *http.Request) {
 	// 插入数据的 SQL 语句
 	query := "INSERT INTO course (name, time_weeks,time_days,day_time,credit,classroom) VALUES (?, ?, ?, ?, ?, ?)"
 	// 执行插入操作
-	result, err := mysqlUtil.DB.Exec(query, body.Name, IntArr2Str(body.Time.Weeks), IntArr2Str(body.Time.Days), body.Time.DayTime, body.Credit, body.Classroom)
+	result, err := mysqlUtil.DB.Exec(query, body.Name, IntArr2Str(body.Time.Weeks), IntArr2Str(body.Time.Days), IntArr2Str(body.Time.DayTime), body.Credit, body.Classroom)
 	if err != nil {
 		log.Fatal(err)
 	}

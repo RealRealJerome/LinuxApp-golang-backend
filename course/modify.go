@@ -66,7 +66,7 @@ func ModifyCourse(w http.ResponseWriter, r *http.Request) {
 	// 更新数据的 SQL 语句
 	query := "UPDATE course SET name = ?, time_weeks = ?,time_days = ?,day_time = ?,credit = ? WHERE name = ?"
 	// 执行更新操作
-	_, err = mysqlUtil.DB.Exec(query, body.Name, IntArr2Str(body.Time.Weeks), IntArr2Str(body.Time.Days), body.Time.DayTime, body.Credit, oldName)
+	_, err = mysqlUtil.DB.Exec(query, body.Name, IntArr2Str(body.Time.Weeks), IntArr2Str(body.Time.Days), IntArr2Str(body.Time.DayTime), body.Credit, oldName)
 	if err != nil {
 		log.Fatal(err)
 	}
