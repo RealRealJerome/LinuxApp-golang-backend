@@ -63,7 +63,7 @@ func DescribeCourse(w http.ResponseWriter, r *http.Request) {
 	name := vars.Get("name")
 	// 查询数据
 	selectQuery := "SELECT c.name,c.time_weeks,c.time_days,c.day_time,c.credit,c.classroom,ud.name,cr.form,cr.time_minutes FROM course c LEFT JOIN course_teacher ct ON c.id = ct.course_id LEFT JOIN user u ON ct.teacher_id = u.id LEFT JOIN user_detail ud ON u.user_detail_id = ud.id LEFT JOIN course_reminder cr on c.course_reminder_id = cr.id and cr.teacher_id = u.id WHERE c.name = ?"
-	selectedName, selectedTimeWeeks, selectedTimeDays, selectedDayTime, selectedCredit, selectedClassroom := "", "", "", "", 0.0, ""
+	selectedName, selectedTimeWeeks, selectedTimeDays, selectedDayTime, selectedCredit, selectedClassroom := "", "", "", 0, 0.0, ""
 	var selectedTeacherName, selectedForm sql.NullString
 	var selectedTimeMinutes sql.NullInt32
 	err := mysqlUtil.DB.QueryRow(selectQuery, name).Scan(&selectedName, &selectedTimeWeeks, &selectedTimeDays, &selectedDayTime, &selectedCredit, &selectedClassroom, &selectedTeacherName, &selectedForm, &selectedTimeMinutes)
@@ -151,7 +151,7 @@ func DescribeCourses(w http.ResponseWriter, r *http.Request) {
 	defer rows.Close()
 	describeReplies := make([]*DescribeReply, 0)
 	for rows.Next() {
-		selectedName, selectedTimeWeeks, selectedTimeDays, selectedDayTime, selectedCredit, selectedClassroom := "", "", "", "", 0.0, ""
+		selectedName, selectedTimeWeeks, selectedTimeDays, selectedDayTime, selectedCredit, selectedClassroom := "", "", "", 0, 0.0, ""
 		var selectedTeacherName, selectedForm sql.NullString
 		var selectedTimeMinutes sql.NullInt32
 		err := rows.Scan(&selectedName, &selectedTimeWeeks, &selectedTimeDays, &selectedDayTime, &selectedCredit, &selectedClassroom, &selectedTeacherName, &selectedForm, &selectedTimeMinutes)

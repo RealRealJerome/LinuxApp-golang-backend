@@ -17,9 +17,9 @@ type CreateReq struct {
 }
 
 type Time struct {
-	Weeks   []int  `json:"weeks"`
-	Days    []int  `json:"days"`
-	DayTime string `json:"dayTime"`
+	Weeks   []int `json:"weeks"`
+	Days    []int `json:"days"`
+	DayTime int   `json:"dayTime"`
 }
 
 func CreateCourse(w http.ResponseWriter, r *http.Request) {
