@@ -137,12 +137,8 @@ func DescribeCourses(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
-	weeks := make([]int, 0)
-	for i := body.Week.Start; i < body.Week.End; i++ {
-		weeks = append(weeks, i)
-	}
 	// 查询数据
-	selectQuery := "SELECT c.name,c.time_weeks,c.time_days,c.day_time,c.credit,c.classroom,ud.name,cr.form,cr.time_minutes FROM course c LEFT JOIN course_teacher ct ON c.id = ct.course_id LEFT JOIN user u ON ct.teacher_id = u.id LEFT JOIN user_detail ud ON u.user_detail_id = ud.id LEFT JOIN course_reminder cr on c.course_reminder_id = cr.id and cr.teacher_id = u.id where c.name = ?"
+	selectQuery := "SELECT c.name,c.time_weeks,c.time_days,c.day_time,c.credit,c.classroom,ud.name,cr.form,cr.time_minutes FROM course c LEFT JOIN course_teacher ct ON c.id = ct.course_id LEFT JOIN user u ON ct.teacher_id = u.id LEFT JOIN user_detail ud ON u.user_detail_id = ud.id LEFT JOIN course_reminder cr on c.course_reminder_id = cr.id and cr.teacher_id = u.id where ud.name = ?"
 	rows, err := mysqlUtil.DB.Query(selectQuery, body.Name)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -158,9 +154,6 @@ func DescribeCourses(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
-		}
-		if !JudgeWeekContains(weeks, selectedTimeWeeks) {
-			continue
 		}
 		hasReminder := true
 		if !selectedForm.Valid {
